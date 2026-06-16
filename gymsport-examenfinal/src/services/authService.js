@@ -7,27 +7,26 @@ const USER_KEY  = 'auth_user'
 const authService = {
 
   async login(email, password) {
+  // Trae todos los usuarios y filtra localmente
+  const { data: users } = await api.get('/usuarios')
 
-    const { data: users } = await api.get('/usuarios', {
-      params: { email }
-    })
+  const user = users.find(
+    (u) => u.email === email && u.password === password
+  )
 
-    const user = users.find(
-      (u) => u.email === email && u.password === password
-    )
+  console.log('Usuario encontrado:', user)
 
-    if (!user) {
-      throw new Error('Credenciales incorrectas. Verifica tu email y contraseña.')
-    }
+  if (!user) {
+    throw new Error('Credenciales incorrectas. Verifica tu email y contraseña.')
+  }
 
+  const token = btoa(`${user.id}:${user.email}:${Date.now()}`)
 
-    const token = btoa(`${user.id}:${user.email}:${Date.now()}`)
+  sessionStorage.setItem(TOKEN_KEY, token)
+  sessionStorage.setItem(USER_KEY, JSON.stringify(user))
 
-    sessionStorage.setItem(TOKEN_KEY, token)
-    sessionStorage.setItem(USER_KEY, JSON.stringify(user))
-
-    return user
-  },
+  return user
+},
 
 
   logout() {

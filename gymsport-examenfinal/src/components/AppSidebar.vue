@@ -70,11 +70,11 @@ import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import authService from '@/services/authService'
 
-const props = defineProps({
+defineProps({
   isOpen: { type: Boolean, default: false }
 })
 
-const emit = defineEmits(['close'])
+defineEmits(['close'])
 const router = useRouter()
 
 const currentUser = computed(() => authService.getUser())

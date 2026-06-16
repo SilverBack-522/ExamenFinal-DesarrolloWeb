@@ -1,7 +1,7 @@
 <template>
   <div class="login-page">
     <div class="login-card">
-      <!-- Logo -->
+      
       <div class="login-logo">
         <i class="bi bi-layers-fill"></i>
       </div>

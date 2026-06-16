@@ -1,12 +1,11 @@
 <template>
   <div class="login-page">
     <div class="login-card">
-      
       <div class="login-logo">
-        <i class="bi bi-layers-fill"></i>
+        <i class="bi bi-lightning-charge-fill"></i>
       </div>
 
-      <h2 class="mb-1">Bienvenido</h2>
+      <h2 class="mb-1">GYMSPORT</h2>
       <p class="mb-4">Ingresa tus credenciales para continuar</p>
 
       <div v-if="errorMsg" class="alert alert-danger d-flex align-items-center gap-2 mb-3">
@@ -14,13 +13,10 @@
         {{ errorMsg }}
       </div>
 
-
       <div>
-
         <div class="mb-3">
           <label class="form-label">
-            <i class="bi bi-envelope me-1"></i>
-            Correo electrónico
+            <i class="bi bi-envelope me-1"></i>Correo electrónico
           </label>
           <input
             v-model="form.email"
@@ -33,11 +29,9 @@
           <div v-if="errors.email" class="invalid-feedback">{{ errors.email }}</div>
         </div>
 
-     
         <div class="mb-4">
           <label class="form-label">
-            <i class="bi bi-lock me-1"></i>
-            Contraseña
+            <i class="bi bi-lock me-1"></i>Contraseña
           </label>
           <div class="input-group">
             <input
@@ -48,17 +42,12 @@
               placeholder="••••••••"
               @keyup.enter="handleLogin"
             />
-            <button
-              class="btn btn-outline-secondary"
-              type="button"
-              @click="showPassword = !showPassword"
-            >
+            <button class="btn btn-outline-secondary" type="button" @click="showPassword = !showPassword">
               <i :class="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
             </button>
             <div v-if="errors.password" class="invalid-feedback">{{ errors.password }}</div>
           </div>
         </div>
-
 
         <button
           class="btn btn-primary w-100"
@@ -71,12 +60,6 @@
           {{ loading ? 'Verificando...' : 'Iniciar sesión' }}
         </button>
       </div>
-
-
-      <p class="text-center mt-4" style="font-size:0.78rem; color: var(--gray);">
-        <i class="bi bi-info-circle me-1"></i>
-        Las credenciales se validan contra MockAPI.
-      </p>
     </div>
   </div>
 </template>
@@ -84,52 +67,33 @@
 <script setup>
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
-import authService from '@/services/authService'
+import authService from '../services/authService'
 
 const router = useRouter()
-
 const form = reactive({ email: '', password: '' })
 const errors = reactive({ email: '', password: '' })
 const errorMsg = ref('')
 const loading = ref(false)
 const showPassword = ref(false)
 
-
 function validate() {
   let valid = true
   errors.email = ''
   errors.password = ''
-
-  if (!form.email) {
-    errors.email = 'El correo es requerido.'
-    valid = false
-  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-    errors.email = 'Ingresa un correo válido.'
-    valid = false
-  }
-
-  if (!form.password) {
-    errors.password = 'La contraseña es requerida.'
-    valid = false
-  } else if (form.password.length < 4) {
-    errors.password = 'Mínimo 4 caracteres.'
-    valid = false
-  }
-
+  if (!form.email) { errors.email = 'El correo es requerido.'; valid = false }
+  if (!form.password) { errors.password = 'La contraseña es requerida.'; valid = false }
   return valid
 }
-
 
 async function handleLogin() {
   errorMsg.value = ''
   if (!validate()) return
-
   loading.value = true
   try {
     await authService.login(form.email, form.password)
-    router.push('/dashboard')
+    router.push({ path: '/dashboard' })
   } catch (err) {
-    errorMsg.value = err.message || 'Error al iniciar sesión. Intenta de nuevo.'
+    errorMsg.value = err.message || 'Error al iniciar sesión.'
   } finally {
     loading.value = false
   }

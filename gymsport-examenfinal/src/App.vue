@@ -6,7 +6,7 @@
       <div
         v-if="sidebarOpen"
         class="d-md-none"
-        style="position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"
+        style="position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:99;"
         @click="sidebarOpen = false"
       ></div>
 
@@ -14,10 +14,13 @@
 
       <main class="main-content">
         <header class="topbar">
-          <button class="btn btn-sm btn-light d-md-none me-2" @click="sidebarOpen = !sidebarOpen">
+          <button class="btn btn-sm btn-outline-secondary d-md-none me-2" @click="sidebarOpen = !sidebarOpen">
             <i class="bi bi-list fs-5"></i>
           </button>
-          <span class="topbar-title">{{ currentRouteName }}</span>
+          <span class="topbar-title">
+            <i class="bi bi-lightning-charge-fill me-2" style="color:var(--primary)"></i>
+            {{ currentRouteName }}
+          </span>
           <div class="topbar-right">
             <div class="user-badge">
               <div class="avatar">{{ userInitials }}</div>
@@ -39,9 +42,9 @@
 <script setup>
 import { ref, computed, provide } from 'vue'
 import { useRoute } from 'vue-router'
-import AppSidebar from '@/components/AppSidebar.vue'
-import AlertToast from '@/components/AlertToast.vue'
-import authService from '@/services/authService'
+import AppSidebar from './components/AppSidebar.vue'
+import AlertToast from './components/AlertToast.vue'
+import authService from './services/authService'
 
 const route = useRoute()
 const sidebarOpen = ref(false)
@@ -58,8 +61,7 @@ const userInitials = computed(() => {
 const routeNames = {
   Dashboard: 'Dashboard',
   Usuarios:  'Gestión de Usuarios',
-  Productos: 'Gestión de Productos',
-  Login:     'Inicio de Sesión'
+  Productos: 'Gestión de Productos'
 }
 
 const currentRouteName = computed(() => routeNames[route.name] || route.name)

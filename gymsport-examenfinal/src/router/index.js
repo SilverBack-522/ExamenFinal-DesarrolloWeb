@@ -1,18 +1,12 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import authService from '@/services/authService'
-
-const LoginView     = () => import('@/views/LoginView.vue')
-const DashboardView = () => import('@/views/DashboardView.vue')
-const UsuariosView  = () => import('@/views/UsuariosView.vue')
-const ProductosView = () => import('@/views/ProductosView.vue')
+import authService from '../services/authService'
 
 const routes = [
-  { path: '/',         redirect: '/dashboard' },
-  { path: '/login',    name: 'Login',     component: LoginView,     meta: { requiresGuest: true } },
-  { path: '/dashboard',name: 'Dashboard', component: DashboardView, meta: { requiresAuth: true } },
-  { path: '/usuarios', name: 'Usuarios',  component: UsuariosView,  meta: { requiresAuth: true } },
-  { path: '/productos',name: 'Productos', component: ProductosView, meta: { requiresAuth: true } },
-  { path: '/:pathMatch(.*)*', redirect: '/login' }
+  { path: '/', redirect: '/login' },
+  { path: '/login',     component: () => import('../views/LoginView.vue') },
+  { path: '/dashboard', component: () => import('../views/DashboardView.vue') },
+  { path: '/usuarios',  component: () => import('../views/UsuariosView.vue') },
+  { path: '/productos', component: () => import('../views/ProductosView.vue') }
 ]
 
 const router = createRouter({
@@ -21,9 +15,9 @@ const router = createRouter({
 })
 
 router.beforeEach((to) => {
+  const publica = ['/login']
   const isAuthenticated = authService.isAuthenticated()
-  if (to.meta.requiresAuth && !isAuthenticated) return { name: 'Login' }
-  if (to.meta.requiresGuest && isAuthenticated) return { name: 'Dashboard' }
+  if (!publica.includes(to.path) && !isAuthenticated) return { path: '/login' }
 })
 
 export default router

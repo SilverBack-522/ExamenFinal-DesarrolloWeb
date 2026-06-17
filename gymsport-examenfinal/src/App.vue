@@ -2,45 +2,48 @@
   <div>
     <AlertToast ref="toastRef" />
 
-    <div v-if="isAuthenticated" class="app-layout">
-      <div
-        v-if="sidebarOpen"
-        class="d-md-none"
-        style="position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:99;"
-        @click="sidebarOpen = false"
-      ></div>
+    <template v-if="isAuthenticated && isAdmin && !['Login', 'Tienda', null].includes(route.name)">
+      <div class="app-layout">
+        <div
+          v-if="sidebarOpen"
+          class="d-md-none"
+          style="position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:99;"
+          @click="sidebarOpen = false"
+        ></div>
 
-      <AppSidebar :is-open="sidebarOpen" @close="sidebarOpen = false" />
+        <AppSidebar :is-open="sidebarOpen" @close="sidebarOpen = false" />
 
-      <main class="main-content">
-        <header class="topbar">
-          <button class="btn btn-sm btn-outline-secondary d-md-none me-2" @click="sidebarOpen = !sidebarOpen">
-            <i class="bi bi-list fs-5"></i>
-          </button>
-          <span class="topbar-title">
-            <i class="bi bi-lightning-charge-fill me-2" style="color:var(--primary)"></i>
-            {{ currentRouteName }}
-          </span>
-          <div class="topbar-right">
-            <div class="user-badge">
-              <div class="avatar">{{ userInitials }}</div>
-              <span class="d-none d-sm-inline">{{ currentUser?.name }}</span>
+        <main class="main-content">
+          <header class="topbar">
+            <button class="btn btn-sm btn-outline-secondary d-md-none me-2" @click="sidebarOpen = !sidebarOpen">
+              <i class="bi bi-list fs-5"></i>
+            </button>
+            <span class="topbar-title">
+              <i class="bi bi-lightning-charge-fill me-2" style="color:var(--primary)"></i>
+              {{ currentRouteName }}
+            </span>
+            <div class="topbar-right">
+              <div class="user-badge">
+                <div class="avatar">{{ userInitials }}</div>
+                <span class="d-none d-sm-inline">{{ currentUser?.name }}</span>
+              </div>
             </div>
+          </header>
+          <div class="page-content">
+            <RouterView />
           </div>
-        </header>
+        </main>
+      </div>
+    </template>
 
-        <div class="page-content">
-          <RouterView />
-        </div>
-      </main>
-    </div>
-
-    <RouterView v-else />
+    <template v-else>
+      <RouterView />
+    </template>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, provide } from 'vue'
+import { ref, computed, provide, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 import AppSidebar from './components/AppSidebar.vue'
 import AlertToast from './components/AlertToast.vue'
@@ -52,6 +55,7 @@ const toastRef = ref(null)
 
 const isAuthenticated = computed(() => authService.isAuthenticated())
 const currentUser = computed(() => authService.getUser())
+const isAdmin = computed(() => authService.getUser()?.role === 'admin')
 
 const userInitials = computed(() => {
   const name = currentUser.value?.name || 'U'
@@ -65,6 +69,12 @@ const routeNames = {
 }
 
 const currentRouteName = computed(() => routeNames[route.name] || route.name)
+
+watchEffect(() => {
+  console.log('isAuthenticated:', isAuthenticated.value)
+  console.log('isAdmin:', isAdmin.value)
+  console.log('route.name:', route.name)
+})
 
 provide('toast', {
   success: (msg) => toastRef.value?.show(msg, 'success'),

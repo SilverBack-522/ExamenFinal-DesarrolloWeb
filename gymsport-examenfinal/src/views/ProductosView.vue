@@ -167,13 +167,13 @@
     <div class="product-card">
       <div class="product-card-img">
   <img
-    v-if="product.image"
+    v-if="product.image && product.image.length > 0"
     :src="product.image"
     :alt="product.name"
-    style="width:100%; height:100%; object-fit:cover;"
+    style="width:100%; height:160px; object-fit:cover; display:block;"
     @error="(e) => e.target.style.display='none'"
   />
-  <span v-else>{{ categoryEmoji(product.category) }}</span>
+  <span v-else style="font-size:3rem;">{{ categoryEmoji(product.category) }}</span>
 </div>
           <div class="product-card-body">
             <div class="d-flex justify-content-between align-items-start mb-1">

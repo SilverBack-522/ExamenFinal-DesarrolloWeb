@@ -3,11 +3,11 @@ import authService from '../services/authService'
 
 const routes = [
   { path: '/', redirect: '/login' },
-  { path: '/login',     component: () => import('../views/LoginView.vue') },
-  { path: '/dashboard', component: () => import('../views/DashboardView.vue') },
-  { path: '/usuarios',  component: () => import('../views/UsuariosView.vue') },
-  { path: '/productos', component: () => import('../views/ProductosView.vue') },
-  { path: '/tienda', component: () => import('../views/TiendaView.vue') }
+  { path: '/login',     name: 'Login',     component: () => import('../views/LoginView.vue') },
+  { path: '/tienda',    name: 'Tienda',    component: () => import('../views/TiendaView.vue') },
+  { path: '/dashboard', name: 'Dashboard', component: () => import('../views/DashboardView.vue') },
+  { path: '/usuarios',  name: 'Usuarios',  component: () => import('../views/UsuariosView.vue') },
+  { path: '/productos', name: 'Productos', component: () => import('../views/ProductosView.vue') }
 ]
 
 const router = createRouter({

@@ -21,10 +21,10 @@
             <i class="bi bi-grid-3x3-gap"></i>
           </button>
         </div>
-        <button class="btn btn-primary" @click="openCreate">
-          <i class="bi bi-plus-circle me-1"></i>
-          Nuevo producto
-        </button>
+       <button v-if="isAdmin" class="btn btn-primary" @click="openCreate">
+  <i class="bi bi-plus-circle me-1"></i>
+  Nuevo producto
+</button>
       </div>
     </div>
 
@@ -134,19 +134,21 @@
               <td class="text-center">
                 <div class="d-flex gap-1 justify-content-center">
                   <button
-                    class="btn btn-outline-primary btn-icon"
-                    title="Editar"
-                    @click="openEdit(product)"
-                  >
-                    <i class="bi bi-pencil-fill"></i>
-                  </button>
-                  <button
-                    class="btn btn-outline-danger btn-icon"
-                    title="Eliminar"
-                    @click="openDelete(product)"
-                  >
-                    <i class="bi bi-trash-fill"></i>
-                  </button>
+  v-if="isAdmin"
+  class="btn btn-outline-primary btn-icon"
+  title="Editar"
+  @click="openEdit(product)"
+>
+  <i class="bi bi-pencil-fill"></i>
+</button>
+<button
+  v-if="isAdmin"
+  class="btn btn-outline-danger btn-icon"
+  title="Eliminar"
+  @click="openDelete(product)"
+>
+  <i class="bi bi-trash-fill"></i>
+</button>
                 </div>
               </td>
             </tr>
@@ -189,20 +191,20 @@
                 <i class="bi bi-box me-1"></i>{{ product.stock }} uds
               </span>
             </div>
-            <div class="d-flex gap-1">
-              <button
-                class="btn btn-outline-primary btn-sm flex-fill"
-                @click="openEdit(product)"
-              >
-                <i class="bi bi-pencil-fill me-1"></i>Editar
-              </button>
-              <button
-                class="btn btn-outline-danger btn-sm"
-                @click="openDelete(product)"
-              >
-                <i class="bi bi-trash-fill"></i>
-              </button>
-            </div>
+           <div v-if="isAdmin" class="d-flex gap-1">
+  <button
+    class="btn btn-outline-primary btn-sm flex-fill"
+    @click="openEdit(product)"
+  >
+    <i class="bi bi-pencil-fill me-1"></i>Editar
+  </button>
+  <button
+    class="btn btn-outline-danger btn-sm"
+    @click="openDelete(product)"
+  >
+    <i class="bi bi-trash-fill"></i>
+  </button>
+</div>
           </div>
         </div>
       </div>
@@ -391,6 +393,9 @@ import { ref, reactive, computed, onMounted, inject } from 'vue'
 import productosService from '@/services/productosService'
 
 const toast = inject('toast')
+import authService from '../services/authService'
+const currentUser = authService.getUser()
+const isAdmin = computed(() => currentUser?.role === 'admin')
 
 
 const products       = ref([])

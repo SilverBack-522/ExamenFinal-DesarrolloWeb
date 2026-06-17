@@ -91,7 +91,12 @@ async function handleLogin() {
   loading.value = true
   try {
     await authService.login(form.email, form.password)
-    router.push({ path: '/dashboard' })
+const user = authService.getUser()
+if (user?.role === 'admin') {
+  router.push({ path: '/dashboard' })
+} else {
+  router.push({ path: '/tienda' })
+}
   } catch (err) {
     errorMsg.value = err.message || 'Error al iniciar sesión.'
   } finally {

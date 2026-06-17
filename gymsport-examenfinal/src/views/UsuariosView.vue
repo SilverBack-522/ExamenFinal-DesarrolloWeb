@@ -3,10 +3,10 @@
 
     <div class="page-header">
       <h2><i class="bi bi-people-fill"></i> Usuarios</h2>
-      <button class="btn btn-primary" @click="openCreate">
-        <i class="bi bi-plus-circle me-1"></i>
-        Nuevo usuario
-      </button>
+      <button v-if="isAdmin" class="btn btn-primary" @click="openCreate">
+  <i class="bi bi-plus-circle me-1"></i>
+  Nuevo usuario
+</button>
     </div>
 
     <div class="card mb-3">
@@ -87,23 +87,23 @@
               </td>
               <td class="text-center">
                 <div class="d-flex gap-1 justify-content-center">
-                  
-                  <button
-                    class="btn btn-outline-primary btn-icon"
-                    title="Editar usuario"
-                    @click="openEdit(user)"
-                  >
-                    <i class="bi bi-pencil-fill"></i>
-                  </button>
-                  
-                  <button
-                    class="btn btn-outline-danger btn-icon"
-                    title="Eliminar usuario"
-                    @click="openDelete(user)"
-                  >
-                    <i class="bi bi-trash-fill"></i>
-                  </button>
-                </div>
+  <button
+    v-if="isAdmin"
+    class="btn btn-outline-primary btn-icon"
+    title="Editar usuario"
+    @click="openEdit(user)"
+  >
+    <i class="bi bi-pencil-fill"></i>
+  </button>
+  <button
+    v-if="isAdmin"
+    class="btn btn-outline-danger btn-icon"
+    title="Eliminar usuario"
+    @click="openDelete(user)"
+  >
+    <i class="bi bi-trash-fill"></i>
+  </button>
+</div>
               </td>
             </tr>
           </tbody>
@@ -252,7 +252,11 @@
 import { ref, reactive, computed, onMounted, inject } from 'vue'
 import usuariosService from '@/services/usuariosService'
 
+
 const toast = inject('toast')
+import authService from '../services/authService'
+const currentUser = authService.getUser()
+const isAdmin = computed(() => currentUser?.role === 'admin')
 
 const users       = ref([])
 const loading     = ref(true)

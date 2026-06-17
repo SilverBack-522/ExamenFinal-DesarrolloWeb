@@ -55,7 +55,10 @@ const toastRef = ref(null)
 
 const isAuthenticated = computed(() => authService.isAuthenticated())
 const currentUser = computed(() => authService.getUser())
-const isAdmin = computed(() => authService.getUser()?.role === 'admin')
+const isAdmin = computed(() => {
+  const user = authService.getUser()
+  return user?.role === 'admin' || user?.role === 'Admin'
+})
 
 const userInitials = computed(() => {
   const name = currentUser.value?.name || 'U'

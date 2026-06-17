@@ -3,45 +3,43 @@
   <aside class="sidebar" :class="{ open: isOpen }">
 
     <div class="sidebar-brand">
-      <div class="d-flex align-items-center gap-2">
-        <div
-          style="
-            width: 36px; height: 36px; border-radius: 9px;
-            background: var(--primary);
-            display: flex; align-items: center; justify-content: center;
-            color: #fff; font-size: 1.1rem;
-          "
-        >
-          <i class="bi bi-layers-fill"></i>
-        </div>
-        <div>
-          <h5>GestiónApp</h5>
-          <small>Panel de administración</small>
-        </div>
-      </div>
+  <div class="d-flex align-items-center gap-2">
+    <div style="
+      width:38px; height:38px; border-radius:8px;
+      background: var(--primary);
+      display:flex; align-items:center;
+      justify-content:center; font-size:1.3rem;
+    ">
+      🏋️
     </div>
+    <div>
+      <h5>GYMSPORT</h5>
+      <small>Panel de administración</small>
+    </div>
+  </div>
+</div>
 
 
     <nav class="sidebar-nav">
-      <span class="nav-section-label">Principal</span>
+  <span class="nav-section-label">Principal</span>
 
-      <RouterLink class="sidebar-link" to="/dashboard" @click="$emit('close')">
-        <i class="bi bi-grid-1x2-fill"></i>
-        Dashboard
-      </RouterLink>
+  <RouterLink class="sidebar-link" to="/dashboard" @click="$emit('close')">
+    <i class="bi bi-house-fill"></i>
+    Inicio
+  </RouterLink>
 
-      <span class="nav-section-label mt-2">Recursos</span>
+  <span class="nav-section-label mt-2">Recursos</span>
 
-      <RouterLink class="sidebar-link" to="/usuarios" @click="$emit('close')">
-        <i class="bi bi-people-fill"></i>
-        Usuarios
-      </RouterLink>
+  <RouterLink class="sidebar-link" to="/usuarios" @click="$emit('close')">
+    <i class="bi bi-people-fill"></i>
+    Usuarios
+  </RouterLink>
 
-      <RouterLink class="sidebar-link" to="/productos" @click="$emit('close')">
-        <i class="bi bi-box-seam-fill"></i>
-        Productos
-      </RouterLink>
-    </nav>
+  <RouterLink class="sidebar-link" to="/productos" @click="$emit('close')">
+    <i class="bi bi-bag-fill"></i>
+    Productos
+  </RouterLink>
+</nav>
 
     <!-- Footer del sidebar con info del usuario -->
     <div class="sidebar-footer">

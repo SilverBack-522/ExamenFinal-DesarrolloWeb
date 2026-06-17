@@ -157,15 +157,22 @@
 
 
     <div v-else class="row g-3">
-      <div
-        v-for="product in filteredProducts"
-        :key="product.id"
-        class="col-sm-6 col-lg-4 col-xl-3"
-      >
-        <div class="product-card">
-          <div class="product-card-img">
-            {{ categoryEmoji(product.category) }}
-          </div>
+  <div
+    v-for="product in filteredProducts"
+    :key="product.id"
+    class="col-sm-6 col-lg-4 col-xl-3"
+  >
+    <div class="product-card">
+      <div class="product-card-img">
+  <img
+    v-if="product.image"
+    :src="product.image"
+    :alt="product.name"
+    style="width:100%; height:100%; object-fit:cover;"
+    @error="(e) => e.target.style.display='none'"
+  />
+  <span v-else>{{ categoryEmoji(product.category) }}</span>
+</div>
           <div class="product-card-body">
             <div class="d-flex justify-content-between align-items-start mb-1">
               <h6 class="mb-0 fw-bold" style="font-size:0.875rem">{{ product.name }}</h6>
@@ -299,6 +306,25 @@
                 />
                 <div class="invalid-feedback">{{ formErrors.stock }}</div>
               </div>
+              <!-- URL imagen -->
+<div class="col-12">
+  <label class="form-label">
+    <i class="bi bi-image me-1"></i>URL de imagen (opcional)
+  </label>
+  <input
+    v-model="formData.image"
+    type="text"
+    class="form-control"
+    placeholder="https://ejemplo.com/imagen.jpg"
+  />
+  <div v-if="formData.image" class="mt-2">
+    <img
+      :src="formData.image"
+      style="height:80px; border-radius:8px; object-fit:cover; border:1px solid var(--border);"
+      @error="(e) => e.target.style.display='none'"
+    />
+  </div>
+</div>
             </div>
           </div>
 
@@ -379,7 +405,7 @@ const savingForm     = ref(false)
 const selectedProduct = ref(null)
 
 const formData = reactive({
-  name: '', description: '', price: '', stock: '', category: ''
+  name: '', description: '', price: '', stock: '', category: '', image: ''
 })
 const formErrors = reactive({
   name: '', price: '', stock: '', category: ''
@@ -429,9 +455,8 @@ function categoryEmoji(cat = '') {
 
 function resetForm() {
   formData.name = formData.description = formData.price = ''
-  formData.stock = formData.category = ''
-  formErrors.name = formErrors.price = formErrors.stock = formErrors.category = ''
-}
+  formData.stock = formData.category = formData.image = ''
+}  
 
 function validateForm() {
   let valid = true
@@ -485,6 +510,7 @@ function openEdit(product) {
   formData.price        = product.price
   formData.stock        = product.stock
   formData.category     = product.category || ''
+  formData.image        = product.image || ''
   formErrors.name = formErrors.price = formErrors.stock = formErrors.category = ''
   showFormModal.value   = true
 }
@@ -510,7 +536,8 @@ async function saveProduct() {
       description: formData.description,
       price:       Number(formData.price),
       stock:       Number(formData.stock),
-      category:    formData.category
+      category:    formData.category,
+      image:       formData.image
     }
 
     if (isEditing.value) {

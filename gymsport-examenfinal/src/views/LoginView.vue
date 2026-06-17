@@ -2,8 +2,8 @@
   <div class="login-page">
     <div class="login-card">
       <div class="login-logo">
-        <i class="bi bi-lightning-charge-fill"></i>
-      </div>
+  🏋️
+</div>
 
       <h2 class="mb-1">GYMSPORT</h2>
       <p class="mb-4">Ingresa tus credenciales para continuar</p>
